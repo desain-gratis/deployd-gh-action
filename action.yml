@@ -1,0 +1,32 @@
+name: Send Deploy Metadata (Go)
+description: Send GitHub deployment metadata to an external endpoint
+inputs:
+  url:
+    description: "Deployd endpoint"
+    required: true
+  namespace:
+    description: "Namespace"
+    required: true
+  name:
+    description: "Name"
+    required: true
+  build-script:
+    description: "Build script"
+    required: true
+  archive:
+    description: "Build archive location (folder or .tar ball)"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        chmod +x "${{ github.action_path }}/dist/action-linux-amd64"
+        "${{ github.action_path }}/dist/action-linux-amd64"
+      env:
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_NAMESPACE: ${{ inputs.namespace }}
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_BUILD_SCRIPT: ${{ inputs.build-script }}
+        INPUT_ARCHIVE: ${{ inputs.archive }}
