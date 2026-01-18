@@ -1,13 +1,19 @@
 package main
 
 import (
-	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+	"net/url"
 	"os"
 	"time"
+
+	common_entity "github.com/desain-gratis/common/types/entity"
+	"github.com/desain-gratis/deployd/src/entity"
+	"github.com/rs/zerolog/log"
+
+	contentsync "github.com/desain-gratis/common/delivery/mycontent-api-client"
+	"github.com/desain-gratis/deployd-gh-action/internal/utility"
 )
 
 func env(key string, required bool) string {
@@ -20,65 +26,105 @@ func env(key string, required bool) string {
 }
 
 func main() {
-	url := env("INPUT_URL", true)
+	urlx := env("INPUT_URL", true)
 	namespace := env("INPUT_NAMESPACE", true)
 	name := env("INPUT_NAME", true)
+	archive := env("ARCHIVE", true)
 
 	eventPath := env("GITHUB_EVENT_PATH", true)
 	eventData, err := os.ReadFile(eventPath)
 	if err != nil {
-		panic(err)
+		log.Warn().Msgf("unable to read github event path: %v", err)
 	}
 
-	var eventPayload map[string]any
-	_ = json.Unmarshal(eventData, &eventPayload)
+	commitID := env("GITHUB_SHA", true)
+	actor := env("GITHUB_ACTOR", true)
 
-	// workflow dispatch
-	payload := map[string]any{
-		"namespace":    namespace,
-		"name":         name,
-		"commit_id":    env("GITHUB_SHA", true),
-		"branch":       "",
-		"actor":        env("GITHUB_ACTOR", true),
-		"tag":          "",
-		"data":         json.RawMessage(eventData),
-		"messsage":     "",
-		"published_at": time.Now(),
-		"source":       "github",
-		"os_arch": []string{
-			"linux/amd64",
-		},
+	ctx := context.Background()
+
+	wd, err := os.Getwd()
+	log.Info().Msgf("pwd: %v %v", wd, err)
+	log.Info().Msgf("input name: %v", name)
+
+	isDir, err := utility.IsDir(archive)
+	if err != nil {
+		log.Panic().Msgf("error reading archive: %v", err)
 	}
+
+	if isDir {
+		outputArchive := "./tmp/archive.tgz"
+		log.Info().Msgf("Bundling to tgz")
+		err := utility.BundleDir(outputArchive, archive)
+		if err != nil {
+			log.Panic().Msgf("error bundling archive: %v", err)
+		}
+		archive = outputArchive
+	}
+
+	osArch := "linux/amd64"
+	tags := []string{"os/arch:linux/amd64"}
+
+	var branch string
+	var tag string
 
 	if env("GITHUB_REF_TYPE", true) == "branch" {
-		payload["branch"] = env("GITHUB_REF_NAME", true)
+		branch = env("GITHUB_REF_NAME", true)
+		tags = append(tags, fmt.Sprintf("branch:%v", branch))
 	} else if env("GITHUB_REF_TYPE", true) == "tag" {
-		payload["tag"] = env("GITHUB_REF_NAME", true)
+		tag = env("GITHUB_REF_NAME", true)
+		tags = append(tags, fmt.Sprintf("tag:%v", tag))
 	}
 
-	body, _ := json.Marshal(payload)
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+	u, err := url.Parse(urlx + "/artifactd/build")
 	if err != nil {
-		panic(err)
+		log.Panic().Msgf("error parsing url: %v", err)
 	}
 
-	req.Header.Set("Artifactd-Namespace", namespace)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "github-action-go")
+	// tagsStr := strings.Join(tags, ",")
+	data := []*entity.Artifact{{
+		UID:          commitID,
+		Ns:           namespace,
+		CommitID:     commitID,
+		Branch:       branch,
+		Actor:        actor,
+		Tag:          tag,
+		Data:         json.RawMessage(eventData),
+		PublishedAt:  time.Now(),
+		Source:       "github",
+		RepositoryID: name,
+		OsArch:       []string{osArch}, // hardcode first
+		URLx:         "",
+		Name:         name,
+		Archive: []*common_entity.File{
+			{Id: commitID + "|" + osArch, Url: archive},
+		},
+	}}
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
+	artifactSync := contentsync.Builder[*entity.Artifact](u, "repository").
+		WithNamespace("*").
+		WithData(data)
+
+	artifactSync.
+		WithFiles(getArchive, "../archive")
+
+	// upload metadata
+
+	err = artifactSync.Build().Execute(ctx)
 	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 300 {
-		b, _ := io.ReadAll(resp.Body)
-		panic(fmt.Sprintf("failed (%d): %s", resp.StatusCode, b))
+		log.Panic().Msgf("failed to execute: %v", err)
 	}
 
-	msg, _ := io.ReadAll(resp.Body)
-	fmt.Println("Metadata sent successfully: %v", string(msg))
+	fmt.Println("Archive uploaded successfully")
+}
+
+func getArchive(t []*entity.Artifact) []contentsync.FileContext[*entity.Artifact] {
+	result := make([]contentsync.FileContext[*entity.Artifact], 0)
+	for i := range t {
+		for j := range t[i].Archive {
+			result = append(result, contentsync.FileContext[*entity.Artifact]{
+				Base: t[i], File: &t[i].Archive[j],
+			})
+		}
+	}
+	return result
 }
