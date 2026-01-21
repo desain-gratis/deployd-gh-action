@@ -31,7 +31,7 @@ runs:
           libwebp6
     - shell: bash
       run: |
-        chmod +x "${{ github.action_path }}/dist/action-linux-amd64"
+        make build
         "${{ github.action_path }}/dist/action-linux-amd64"
       env:
         INPUT_URL: ${{ inputs.url }}

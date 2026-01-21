@@ -5,6 +5,7 @@ endif
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o dist/action-linux-amd64 ./cmd/action/main.go
+	chmod +x dist/action-linux-amd64
 
 run-local:
 	GOOS=linux GOARCH=amd64 go run ./cmd/action/main.go
