@@ -21,17 +21,7 @@ runs:
   using: composite
   steps:
     - shell: bash
-      name: Install image processing libraries
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libwebp-dev \
-          libjpeg-dev \
-          libpng-dev \
-          libwebp6
-    - shell: bash
-      run: |
-        make build
         "${{ github.action_path }}/dist/action-linux-amd64"
       env:
         INPUT_URL: ${{ inputs.url }}
