@@ -27,7 +27,8 @@ runs:
         sudo apt-get install -y \
           libwebp-dev \
           libjpeg-dev \
-          libpng-dev
+          libpng-dev \
+          libwebp6
     - shell: bash
       run: |
         chmod +x "${{ github.action_path }}/dist/action-linux-amd64"
