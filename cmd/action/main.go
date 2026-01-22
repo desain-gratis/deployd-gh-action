@@ -29,7 +29,7 @@ func main() {
 	urlx := env("INPUT_URL", true)
 	namespace := env("INPUT_NAMESPACE", true)
 	name := env("INPUT_NAME", true)
-	archive := env("ARCHIVE", true)
+	archive := env("INPUT_ARCHIVE", true)
 
 	eventPath := env("GITHUB_EVENT_PATH", true)
 	eventData, err := os.ReadFile(eventPath)
