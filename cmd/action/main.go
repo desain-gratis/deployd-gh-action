@@ -96,7 +96,7 @@ func main() {
 		URLx:         "",
 		Name:         name,
 		Archive: []*common_entity.File{
-			{Id: commitID + "|" + osArch, Url: archive},
+			{Id: osArch, Url: archive},
 		},
 	}}
 
