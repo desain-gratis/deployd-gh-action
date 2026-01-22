@@ -100,16 +100,21 @@ func main() {
 		},
 	}}
 
-	artifactSync := contentsync.Builder[*entity.Artifact](u, "repository").
+	buildSync := contentsync.Builder[*entity.Artifact](u, "repository").
 		WithNamespace("*").
 		WithData(data)
 
-	artifactSync.
-		WithFiles(getArchive, "../archive")
+	// TODO: improve DevX it's a bit painful
+	// because you can get parameter automatically from parents
+	//
+
+	// notice there is no "repository" here because the main entity Artifact already have "repository" ref.
+	buildSync.
+		WithFiles(getArchive, "../archive", "build")
 
 	// upload metadata
 
-	err = artifactSync.Build().Execute(ctx)
+	err = buildSync.Build().Execute(ctx)
 	if err != nil {
 		log.Panic().Msgf("failed to execute: %v", err)
 	}
