@@ -23,3 +23,7 @@ run-local:
 
 run:
 	dist/action-linux-amd64
+
+push-latest:
+	git tag latest -f
+	git push origin latest -f
