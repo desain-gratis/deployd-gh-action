@@ -82,7 +82,7 @@ func main() {
 
 	// tagsStr := strings.Join(tags, ",")
 	data := []*entity.BuildArtifact{{
-		Id:           "<will be replaced>",
+		Id:           "", // important to left this one empty
 		Ns:           namespace,
 		CommitID:     commitID,
 		Branch:       branch,
