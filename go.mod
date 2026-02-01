@@ -14,7 +14,6 @@ require (
 
 require (
 	github.com/disintegration/imaging v1.6.2 // indirect
-	github.com/kolesa-team/go-webp v1.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	golang.org/x/image v0.18.0 // indirect
