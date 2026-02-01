@@ -7,8 +7,8 @@ toolchain go1.24.11
 replace github.com/desain-gratis/common => ../common
 
 require (
-	github.com/desain-gratis/common v0.0.1
-	github.com/desain-gratis/deployd v0.0.0-20260118101803-db079e5bbca8
+	github.com/desain-gratis/common v0.0.2-0.20260201145442-11d7f4fcfab6
+	github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06
 	github.com/rs/zerolog v1.34.0
 )
 

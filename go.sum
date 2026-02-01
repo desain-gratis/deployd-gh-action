@@ -3,6 +3,8 @@ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/desain-gratis/deployd v0.0.0-20260118101803-db079e5bbca8 h1:7B+KgKol2QCl/qwuMk8LOtvI0homOTWHYd07OnHJ7dI=
 github.com/desain-gratis/deployd v0.0.0-20260118101803-db079e5bbca8/go.mod h1:xdzswpquY1u8N42sDr4oPXWlGQNPNOiUK4eV7QoadZE=
+github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06 h1:sC01H9TIogIjNlheNUwD69vh9mAAulC+YzMGMgCdrd4=
+github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06/go.mod h1:MDk5Fa6xY1ny5lVoyUnRXXyn75bmWWSgz9hiFHFld80=
 github.com/disintegration/imaging v1.6.2 h1:w1LecBlG2Lnp8B3jk5zSuNqd7b4DXhcjwek1ei82L+c=
 github.com/disintegration/imaging v1.6.2/go.mod h1:44/5580QXChDfwIclfc/PCwrr44amcmDAg8hxG0Ewe4=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=

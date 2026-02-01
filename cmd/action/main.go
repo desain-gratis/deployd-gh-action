@@ -81,8 +81,8 @@ func main() {
 	}
 
 	// tagsStr := strings.Join(tags, ",")
-	data := []*entity.Artifact{{
-		UID:          commitID,
+	data := []*entity.BuildArtifact{{
+		Id:           "<will be replaced>",
 		Ns:           namespace,
 		CommitID:     commitID,
 		Branch:       branch,
@@ -100,7 +100,7 @@ func main() {
 		},
 	}}
 
-	buildSync := contentsync.Builder[*entity.Artifact](u, "repository").
+	buildSync := contentsync.Builder[*entity.BuildArtifact](u, "repository").
 		WithNamespace("*").
 		WithData(data)
 
@@ -122,11 +122,11 @@ func main() {
 	fmt.Println("Archive uploaded successfully")
 }
 
-func getArchive(t []*entity.Artifact) []contentsync.FileContext[*entity.Artifact] {
-	result := make([]contentsync.FileContext[*entity.Artifact], 0)
+func getArchive(t []*entity.BuildArtifact) []contentsync.FileContext[*entity.BuildArtifact] {
+	result := make([]contentsync.FileContext[*entity.BuildArtifact], 0)
 	for i := range t {
 		for j := range t[i].Archive {
-			result = append(result, contentsync.FileContext[*entity.Artifact]{
+			result = append(result, contentsync.FileContext[*entity.BuildArtifact]{
 				Base: t[i], File: &t[i].Archive[j],
 			})
 		}
