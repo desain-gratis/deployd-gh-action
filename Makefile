@@ -15,7 +15,7 @@ build:
 # 	CGO_ENABLED=1 \
 # 	CGO_CFLAGS="-I$(shell pwd)/dist/libwebp-1.6.0-linux-x86-64/include -I dist/libwebp-1.6.0-linux-x86-64/include/webp" \
 # 	CGO_LDFLAGS="-L$(shell pwd)/dist/libwebp-1.6.0-linux-x86-64/lib -lwebp -lsharpyuv -static"
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o dist/action-linux-amd64 ./cmd/action/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/action-linux-amd64 ./cmd/action/main.go
 	chmod +x dist/action-linux-amd64
 
 run-local:
