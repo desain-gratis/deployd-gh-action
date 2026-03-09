@@ -1,6 +1,8 @@
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
-github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06 h1:sC01H9TIogIjNlheNUwD69vh9mAAulC+YzMGMgCdrd4=
-github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06/go.mod h1:MDk5Fa6xY1ny5lVoyUnRXXyn75bmWWSgz9hiFHFld80=
+github.com/desain-gratis/common v0.0.2-0.20260309013129-f449d070fb75 h1:dZXnmDeH6PEo9nDqHV3E0MaUsqZQNZsSxglcMwm+qa0=
+github.com/desain-gratis/common v0.0.2-0.20260309013129-f449d070fb75/go.mod h1:KcV1lcA6mvEuFw0WJLGGo4A2Da2iINm6k8FaCgzxyRY=
+github.com/desain-gratis/deployd v0.0.0-20260309013837-f2fc508a6216 h1:Foxih8JC9VBaJqFQ+EJJ1MN9DwvTIImdjMM4oJpzabE=
+github.com/desain-gratis/deployd v0.0.0-20260309013837-f2fc508a6216/go.mod h1:F0N/dAxQ1ughb/LNciKAN5/xGwIaSl3rQrE5OyrYpN8=
 github.com/disintegration/imaging v1.6.2 h1:w1LecBlG2Lnp8B3jk5zSuNqd7b4DXhcjwek1ei82L+c=
 github.com/disintegration/imaging v1.6.2/go.mod h1:44/5580QXChDfwIclfc/PCwrr44amcmDAg8hxG0Ewe4=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=

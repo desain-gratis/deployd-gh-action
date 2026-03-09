@@ -4,11 +4,11 @@ go 1.24.0
 
 toolchain go1.24.11
 
-replace github.com/desain-gratis/common => ../common
+// replace github.com/desain-gratis/common => ../common
 
 require (
-	github.com/desain-gratis/common v0.0.2-0.20260309011350-525c171cc41d
-	github.com/desain-gratis/deployd v0.0.0-20260201150116-affd0bb93c06
+	github.com/desain-gratis/common v0.0.2-0.20260309013129-f449d070fb75
+	github.com/desain-gratis/deployd v0.0.0-20260309013837-f2fc508a6216
 	github.com/rs/zerolog v1.34.0
 )
 
