@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 	"time"
@@ -34,7 +35,7 @@ func main() {
 	eventPath := env("GITHUB_EVENT_PATH", true)
 	eventData, err := os.ReadFile(eventPath)
 	if err != nil {
-		log.Warn().Msgf("unable to read github event path: %v", err)
+		log.Fatal().Msgf("unable to read github event path: %v", err)
 	}
 
 	commitID := env("GITHUB_SHA", true)
@@ -76,6 +77,39 @@ func main() {
 	}
 
 	u, err := url.Parse(urlx + "/artifactd/build")
+	if err != nil {
+		log.Panic().Msgf("error parsing url: %v", err)
+	}
+
+	urepo, err := url.Parse(urlx + "/artifactd/repository")
+	if err != nil {
+		log.Panic().Msgf("error parsing url: %v", err)
+	}
+
+	event := make(map[string]any)
+	err = json.Unmarshal(eventData, &event)
+	if err != nil {
+		log.Panic().Msgf("error parsing event: '%v' %v", string(eventData), err)
+	}
+
+	x := contentsync.New[*entity.Repository](http.DefaultClient, urepo.String(), nil, "")
+	if err != nil {
+		log.Panic().Msgf("error sycing repoistory data: %v", err)
+	}
+
+	repod := &entity.Repository{
+		Ns:          namespace,
+		Id:          name,
+		Name:        name,
+		Source:      "github",
+		PublishedAt: time.Now(),
+	}
+	if repo, ok := event["repository"].(map[string]any); ok {
+		repod.Description, _ = repo["description"].(string)
+		repod.SourceURL, _ = repo["url"].(string)
+	}
+
+	_, err = x.Post(ctx, repod, nil)
 	if err != nil {
 		log.Panic().Msgf("error parsing url: %v", err)
 	}
